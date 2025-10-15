@@ -4,24 +4,38 @@ import { Save, X } from "lucide-react";
 export default function EmployeeUpload({ token }) {
   const [file, setFile] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [parsedData, setParsedData] = useState(null);
+  const [parsedData, setParsedData] = useState({});
   const [imagePath, setImagePath] = useState("");
   const [isDragging, setIsDragging] = useState(false);
-  const [uploading, setUploading] = useState(false); 
-  const [uploadMessage, setUploadMessage] = useState(""); 
-  const [errorMessage, setErrorMessage] = useState(""); // 🔹 Error handling
+  const [uploading, setUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
+  const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true); };
   const handleDragLeave = () => setIsDragging(false);
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files?.[0]) setFile(e.dataTransfer.files[0]);
+  };
+
+  // Flatten nested objects for easy rendering
+  const flattenData = (obj, prefix = "") => {
+    let result = {};
+    for (let key in obj) {
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        if (Array.isArray(obj[key])) {
+          result[`${prefix}${key}`] = JSON.stringify(obj[key], null, 2);
+        } else {
+          Object.assign(result, flattenData(obj[key], `${prefix}${key}.`));
+        }
+      } else {
+        result[`${prefix}${key}`] = obj[key];
+      }
+    }
+    return result;
   };
 
   const handleFileUpload = async () => {
@@ -48,8 +62,9 @@ export default function EmployeeUpload({ token }) {
       if (!data.success) throw new Error(data.message);
 
       setUploadMessage("Processing OCR...");
-      setParsedData(data.ocrText ? { ocrText: data.ocrText } : {});
-      setImagePath(data.file.path);
+      const flattened = flattenData(data.parsedJson || data); // fallback to raw data if parsedJson missing
+      setParsedData(flattened);
+      setImagePath(data.file?.path || "");
       setModalOpen(true);
       setUploadMessage("✅ Done!");
     } catch (err) {
@@ -82,7 +97,7 @@ export default function EmployeeUpload({ token }) {
       alert("✅ Invoice saved!");
       setModalOpen(false);
       setFile(null);
-      setParsedData(null);
+      setParsedData({});
     } catch (err) {
       setErrorMessage(err.message || "Save failed");
     }
@@ -101,19 +116,10 @@ export default function EmployeeUpload({ token }) {
           isDragging ? "border-green-500 bg-green-50" : file ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-50"
         }`}
       >
-        {file ? (
-          <p className="text-green-700 font-semibold">{file.name}</p>
-        ) : (
-          <p className="text-gray-700">Drag & drop or click to select a file</p>
-        )}
-        <input
-          type="file"
-          onChange={handleFileChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
+        {file ? <p className="text-green-700 font-semibold">{file.name}</p> : <p className="text-gray-700">Drag & drop or click to select a file</p>}
+        <input type="file" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
       </div>
 
-      {/* Upload button */}
       <button
         onClick={handleFileUpload}
         disabled={!file || uploading}
@@ -122,24 +128,17 @@ export default function EmployeeUpload({ token }) {
         {uploading ? uploadMessage || "Processing..." : "Upload & Process"}
       </button>
 
-      {/* Progress Bar */}
       {uploading && (
         <div className="w-full mt-2">
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-2 bg-green-500 rounded-full animate-pulse"
-              style={{ width: "100%" }}
-            ></div>
+            <div className="h-2 bg-green-500 rounded-full animate-pulse" style={{ width: "100%" }}></div>
           </div>
           <p className="text-sm text-gray-500 mt-1 text-center">{uploadMessage}</p>
         </div>
       )}
 
-      {/* Error Box */}
       {errorMessage && (
-        <div className="w-full mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
-          {errorMessage}
-        </div>
+        <div className="w-full mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">{errorMessage}</div>
       )}
 
       {/* Modal */}
@@ -148,40 +147,26 @@ export default function EmployeeUpload({ token }) {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col">
             <div className="bg-blue-600 text-white p-6 flex justify-between items-center rounded-t-2xl">
               <h3 className="text-xl font-bold">Review Invoice</h3>
-              <button onClick={() => setModalOpen(false)}>
-                <X className="w-6 h-6" />
-              </button>
+              <button onClick={() => setModalOpen(false)}><X className="w-6 h-6" /></button>
             </div>
 
             <div className="p-6 flex flex-col gap-4">
-              {Object.keys(parsedData).map(
-                (field) =>
-                  (typeof parsedData[field] === "string" ||
-                    typeof parsedData[field] === "number") && (
-                    <div key={field}>
-                      <label className="text-sm font-semibold">{field}</label>
-                      <input
-                        type="text"
-                        value={parsedData[field]}
-                        onChange={(e) => handleFieldChange(e, field)}
-                        className="w-full border-2 border-gray-200 rounded-lg px-3 py-2"
-                      />
-                    </div>
-                  )
-              )}
+              {Object.keys(parsedData).map(field => (
+                <div key={field}>
+                  <label className="text-sm font-semibold">{field}</label>
+                  <textarea
+                    value={parsedData[field]}
+                    onChange={(e) => handleFieldChange(e, field)}
+                    className="w-full border-2 border-gray-200 rounded-lg px-3 py-2"
+                    rows={Array.isArray(parsedData[field]) || parsedData[field]?.includes("\n") ? 4 : 1}
+                  />
+                </div>
+              ))}
             </div>
 
             <div className="flex justify-end gap-3 p-6 border-t-2 border-gray-200 bg-gray-50">
-              <button
-                onClick={() => setModalOpen(false)}
-                className="px-6 py-2 rounded-lg border-2 border-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveInvoice}
-                className="px-6 py-2 rounded-lg bg-blue-600 text-white flex items-center gap-2"
-              >
+              <button onClick={() => setModalOpen(false)} className="px-6 py-2 rounded-lg border-2 border-gray-300">Cancel</button>
+              <button onClick={handleSaveInvoice} className="px-6 py-2 rounded-lg bg-blue-600 text-white flex items-center gap-2">
                 <Save className="w-5 h-5" /> Save
               </button>
             </div>

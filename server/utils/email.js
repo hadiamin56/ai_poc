@@ -59,4 +59,4 @@
 //   await transporter.sendMail(mailOptions);
 // };
 
-// module.exports = { sendOtpEmail };
+// // module.exports = { sendOtpEmail };

@@ -153,17 +153,18 @@ export default function Dashboard() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete admin?")) return;
-    try {
-      await axios.delete(`http://localhost:5000/api/auth/delete-admin/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchAdmins();
-    } catch (err) {
-      alert(err.response?.data?.message || "Delete failed");
-    }
-  };
+const handleDelete = async (id) => {
+  if (!window.confirm("Delete admin?")) return;
+  try {
+    await axios.delete(`http://localhost:5000/api/auth/delete-admin/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchAdmins();
+  } catch (err) {
+    alert(err.response?.data?.message || "Delete failed");
+  }
+};
+
 
   const openUsersModal = (adminId) => {
     const admin = admins.find((a) => a._id === adminId);

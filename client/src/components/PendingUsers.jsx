@@ -1,4 +1,4 @@
-import { Clock, UserCircle, Mail, Shield, CheckCircle } from "lucide-react";
+import { Clock, UserCircle, Mail, Shield, CheckCircle, AlertCircle } from "lucide-react";
 
 export default function PendingUsers({ pendingUsers, handleApprove }) {
   return (
@@ -49,45 +49,73 @@ export default function PendingUsers({ pendingUsers, handleApprove }) {
                     Status
                   </div>
                 </th>
+                <th className="px-4 py-4 text-left text-sm font-bold text-gray-700 border-b-2 border-gray-200">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-gray-500" />
+                    Email Verified
+                  </div>
+                </th>
                 <th className="px-4 py-4 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">
                   Action
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white">
-              {pendingUsers.map((u) => (
-                <tr 
-                  key={u._id} 
-                  className="hover:bg-amber-50 transition-colors border-b border-gray-200 last:border-b-0"
-                >
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
-                        <span className="text-amber-700 font-semibold text-sm">
-                          {u.ownerName?.charAt(0).toUpperCase()}
-                        </span>
+              {pendingUsers.map((u) => {
+                const isEmailVerified = u.emailVerified === true;
+                return (
+                  <tr 
+                    key={u._id} 
+                    className="hover:bg-amber-50 transition-colors border-b border-gray-200 last:border-b-0"
+                  >
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
+                          <span className="text-amber-700 font-semibold text-sm">
+                            {u.ownerName?.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <span className="font-semibold text-gray-800">{u.ownerName}</span>
                       </div>
-                      <span className="font-semibold text-gray-800">{u.ownerName}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4 text-gray-700">{u.email}</td>
-                  <td className="px-4 py-4">
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-semibold">
-                      <Clock className="w-3 h-3" />
-                      {u.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4 text-center">
-                    <button 
-                      onClick={() => handleApprove(u._id)} 
-                      className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2"
-                    >
-                      <CheckCircle className="w-4 h-4" />
-                      Approve
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-4 py-4 text-gray-700">{u.email}</td>
+                    <td className="px-4 py-4">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-semibold">
+                        <Clock className="w-3 h-3" />
+                        {u.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4">
+                      {isEmailVerified ? (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                          <CheckCircle className="w-3 h-3" />
+                          Verified
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-semibold">
+                          <AlertCircle className="w-3 h-3" />
+                          Not Verified
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-4 text-center">
+                      <button 
+                        onClick={() => handleApprove(u._id)} 
+                        disabled={!isEmailVerified}
+                        className={`px-4 py-2 rounded-lg font-semibold shadow-md transition-all inline-flex items-center gap-2 ${
+                          isEmailVerified
+                            ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white hover:shadow-lg cursor-pointer'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
+                        }`}
+                        title={!isEmailVerified ? 'User must verify email before approval' : 'Approve user'}
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Approve
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
