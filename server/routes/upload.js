@@ -147,5 +147,4 @@ router.post("/save-invoice", authMiddleware, async (req, res) => {
 module.exports = router;
 
 
-module.exports = router;
 
