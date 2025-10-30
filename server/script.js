@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const User = require("./models/Users"); // adjust path if needed
 require("dotenv").config();
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://hadiamin56:9622451242hH@cluster0.ueicsng.mongodb.net/invoice_app?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://zubairahmadbhat920712:forget2025@blogcluster.97sao.mongodb.net/invoice_app?retryWrites=true&w=majority&appName=blogcluster";
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log("MongoDB connected"))
