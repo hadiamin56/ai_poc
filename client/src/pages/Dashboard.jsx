@@ -813,7 +813,7 @@ export default function Dashboard() {
   // ✅ Fetch Admins (super admin only)
   const fetchAdmins = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/all-admins", {
+      const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/all-admins", {
         withCredentials: true,
       });
       setAdmins(res.data);
@@ -827,13 +827,13 @@ export default function Dashboard() {
     if (!user) return;
     try {
       if (user.role === "admin") {
-        const res = await axios.get("http://localhost:5000/api/auth/users", {
+        const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/users", {
           withCredentials: true,
         });
         setSubUsers(res.data);
       }
       if (user.role === "super_admin") {
-        const res = await axios.get("http://localhost:5000/api/auth/pending-users", {
+        const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/pending-users", {
           withCredentials: true,
         });
         setPendingUsers(res.data);
@@ -856,7 +856,7 @@ export default function Dashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/create-user", form, {
+      const res = await axios.post("https://ai-poc-3.onrender.com/api/auth/create-user", form, {
         withCredentials: true,
       });
       alert(`Sub-user created!\nPassword: ${res.data.plainPassword}`);
@@ -880,7 +880,7 @@ export default function Dashboard() {
   const handleApprove = async (id) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/auth/approve-user/${id}`,
+        `https://ai-poc-3.onrender.com/api/auth/approve-user/${id}`,
         {},
         { withCredentials: true }
       );
@@ -906,7 +906,7 @@ export default function Dashboard() {
     e.preventDefault();
     try {
       await axios.patch(
-        `http://localhost:5000/api/auth/update-admin/${editForm._id}`,
+        `https://ai-poc-3.onrender.com/api/auth/update-admin/${editForm._id}`,
         editForm,
         { withCredentials: true }
       );
@@ -923,7 +923,7 @@ export default function Dashboard() {
     if (!window.confirm("Toggle status?")) return;
     try {
       await axios.patch(
-        `http://localhost:5000/api/auth/disable-admin/${id}`,
+        `https://ai-poc-3.onrender.com/api/auth/disable-admin/${id}`,
         {},
         { withCredentials: true }
       );
@@ -937,7 +937,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete admin?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/auth/delete-admin/${id}`, {
+      await axios.delete(`https://ai-poc-3.onrender.com/api/auth/delete-admin/${id}`, {
         withCredentials: true,
       });
       fetchAdmins();

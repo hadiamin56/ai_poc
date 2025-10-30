@@ -13,7 +13,7 @@ export default function ResetPassword() {
     setMessage(null);
 
     try {
-      const res = await axios.post(`http://localhost:5000/api/auth/reset-password/${token}`, { password });
+      const res = await axios.post(`https://ai-poc-3.onrender.com/api/auth/reset-password/${token}`, { password });
       setMessage({ type: "success", text: res.data.message });
 
       setTimeout(() => navigate("/login"), 2000);

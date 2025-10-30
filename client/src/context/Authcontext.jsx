@@ -182,7 +182,7 @@ export const AuthProvider = ({ children }) => {
   // Fetch current user from backend using cookie
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/dashboard", {
+      const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/dashboard", {
         withCredentials: true, // ✅ send cookie
       });
 
@@ -210,7 +210,7 @@ export const AuthProvider = ({ children }) => {
 
   const logoutUser = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true });
+      await axios.post("https://ai-poc-3.onrender.com/api/auth/logout", {}, { withCredentials: true });
     } catch (err) {
       console.error("Logout failed:", err);
     }

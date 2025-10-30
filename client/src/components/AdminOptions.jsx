@@ -512,7 +512,7 @@ export default function AdminOptions({
       setErrorMessage("");
 
       const res = await axios.post(
-        "http://localhost:5000/api/files/upload",
+        "https://ai-poc-3.onrender.com/api/files/upload",
         formData,
         { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -544,7 +544,7 @@ export default function AdminOptions({
     try {
       setErrorMessage("");
       const res = await axios.post(
-        "http://localhost:5000/api/files/save-invoice",
+        "https://ai-poc-3.onrender.com/api/files/save-invoice",
         {
           parsedData: rawParsedData,
           imagePath,
@@ -572,7 +572,7 @@ export default function AdminOptions({
 
   const fetchUserInvoices = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/files/all-invoices", { withCredentials: true });
+      const res = await axios.get("https://ai-poc-3.onrender.com/api/files/all-invoices", { withCredentials: true });
       if (res.data.success) {
         const invoices = res.data.invoices.map(inv => ({
           ...inv,
@@ -589,7 +589,7 @@ export default function AdminOptions({
   const handleDeleteInvoice = async (id) => {
     if (!window.confirm("Delete this invoice?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/files/delete-invoice/${id}`, { withCredentials: true });
+      await axios.delete(`https://ai-poc-3.onrender.com/api/files/delete-invoice/${id}`, { withCredentials: true });
       fetchUserInvoices();
     } catch (err) {
       alert(err.response?.data?.message || err.message || "Delete failed");

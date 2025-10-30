@@ -1095,6 +1095,9 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
+const BASE_URL = "https://ai-poc-3.onrender.com";
+
+
 export default function BusinessInfo({ user = {}, refreshUser }) {
   const [email, setEmail] = useState(user.email || "");
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -1122,7 +1125,9 @@ export default function BusinessInfo({ user = {}, refreshUser }) {
 
   const handleSaveEmail = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/update-my-email", {
+      // const res = await fetch("http://localhost:5000/api/auth/update-my-email", {
+const res = await fetch("https://ai-poc-3.onrender.com/api/auth/update-my-email", {
+
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -1143,7 +1148,7 @@ export default function BusinessInfo({ user = {}, refreshUser }) {
   // --- Send OTP ---
   const handleSendOtp = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/send-otp", {
+      const res = await fetch("https://ai-poc-3.onrender.com/api/auth/send-otp", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -1164,7 +1169,7 @@ export default function BusinessInfo({ user = {}, refreshUser }) {
   const handleVerifyOtp = async () => {
     setIsVerifying(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      const res = await fetch("https://ai-poc-3.onrender.com/api/auth/verify-otp", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -1195,9 +1200,9 @@ export default function BusinessInfo({ user = {}, refreshUser }) {
       let url = "";
 
       if (user.role === "admin") {
-        url = "http://localhost:5000/api/invoices/export";
+        url = "https://ai-poc-3.onrender.com/api/invoices/export";
       } else {
-        url = "http://localhost:5000/api/my-invoices/export";
+        url = "https://ai-poc-3.onrender.com/api/my-invoices/export";
       }
 
       const res = await axios.get(url, {
@@ -1227,7 +1232,7 @@ export default function BusinessInfo({ user = {}, refreshUser }) {
   const handleExportDeletedInvoices = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/invoices/export?type=deleted",
+        "https://ai-poc-3.onrender.com/api/invoices/export?type=deleted",
         {
           responseType: "blob",
           withCredentials: true,

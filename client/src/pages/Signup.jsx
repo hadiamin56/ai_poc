@@ -239,7 +239,7 @@ export default function Signup() {
     setMessage(null);
 
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", form);
+      await axios.post("https://ai-poc-3.onrender.com/api/auth/signup", form);
       setMessage({ type: "success", text: "Signup successful! Redirecting to login..." });
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {

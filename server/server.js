@@ -1,86 +1,3 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const cors = require('cors');
-// const dotenv = require('dotenv');
-
-// dotenv.config();
-
-// const app = express();
-// app.use(cors());
-// app.use(express.json());
-
-// mongoose.connect(process.env.MONGO_URI)
-//   .then(() => console.log('MongoDB connected'))
-//   .catch(err => console.error(err));
-
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use("/api/files", require("./routes/upload"));
-// app.use('/api', require('./routes/export'));
-
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
-
-
-
-
-
-
-
-
-
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const cors = require('cors');
-// const dotenv = require('dotenv');
-// const cookieParser = require('cookie-parser'); // ✅ add cookie-parser
-// const path = require('path');
-
-// dotenv.config();
-
-// const app = express();
-
-// // ✅ CORS setup with credentials
-// app.use(cors({
-//   origin: 'http://localhost:3000', // frontend URL
-//   credentials: true // ✅ allow cookies
-// }));
-
-
-
-
-
-
-
-
-// app.use(express.json());
-// app.use(cookieParser()); // ✅ enable cookie parsing
-
-// mongoose.connect(process.env.MONGO_URI)
-//   .then(() => console.log('MongoDB connected'))
-//   .catch(err => console.error(err));
-
-// // Routes
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use("/api/files", require("./routes/upload"));
-// app.use('/api', require('./routes/export'));
-
-// app.use("/temp_uploads", express.static(path.join(__dirname, "temp_uploads"))); // 👈 this line
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT} and process.env.N8N_WEBHOOK_URL`));
-
-
-
-
-
-
-
-// for put request uske liye changes hai 
-//sundays working code 
 
 
 const express = require("express");
@@ -89,6 +6,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+require("dotenv").config();
+
 
 dotenv.config();
 const app = express();
@@ -100,6 +19,16 @@ app.use(
     credentials: true, // allow cookies
   })
 );
+
+
+
+
+
+
+
+
+
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -114,6 +43,13 @@ mongoose
   .catch((err) => console.error("MongoDB error:", err));
 
 // ✅ Routes
+
+
+app.get('/', (req, res) => {
+  res.send("Server Running");
+});
+
+
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/files", require("./routes/upload"));
 app.use("/api", require("./routes/export")); // If you have export route
@@ -121,7 +57,11 @@ app.use("/api", require("./routes/export")); // If you have export route
 
 // ✅ Static folders for uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual uploads folder
-// app.use("/temp_uploads", express.static(path.join(__dirname, "temp_uploads"))); // temporary folder
+
+
+
+
+
 
 
 
@@ -129,6 +69,9 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
+
+
+
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
