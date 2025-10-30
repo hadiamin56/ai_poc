@@ -16,7 +16,7 @@ const app = express();
 app.use(
   cors({
     origin:["http://localhost:3000",
-      "https://ai-poc-4.onrender.com"
+      "https://ai-poc-3.onrender.com"
     ],// frontend URL
 
     credentials: true, // allow cookies
