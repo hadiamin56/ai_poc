@@ -353,40 +353,6 @@ router.get("/all-invoices", authMiddleware, async (req, res) => {
 // ============================
 // 📄 Fetch My Invoices (Fixed)
 // ============================
-// router.get("/my-invoices", authMiddleware, async (req, res) => {
-//   try {
-//     const user = req.user;
-
-//     let invoices = [];
-
-//     if (user.role === "admin") {
-//       // Admin → apne + sub-users ke invoices
-//       const subUsers = await User.find({ parentBusinessId: user.id });
-//       const subUserIds = subUsers.map((u) => u._id);
-
-//       invoices = await Invoice.find({
-//         uploadedBy: { $in: [...subUserIds, user.id] },
-//         isDeleted: false,
-//       }).sort({ createdAt: -1 });
-//     } else {
-//       // Normal user → apne invoices
-//       invoices = await Invoice.find({
-//         uploadedBy: user.id,
-//         isDeleted: false,
-//       }).sort({ createdAt: -1 });
-//     }
-
-//     return res.json(invoices);
-//   } catch (err) {
-//     console.error("Fetch invoices error:", err);
-//     return res.status(500).json({ message: "Failed to fetch invoices" });
-//   }
-// });
-
-
-// ============================
-// 📄 Fetch My Invoices (Fixed)
-// ============================
 router.get("/my-invoices", authMiddleware, async (req, res) => {
   try {
     const user = req.user;

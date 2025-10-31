@@ -72,12 +72,22 @@ router.post('/login', async (req, res) => {
 const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
 // ✅ Set HTTP-only cookie
+// res.cookie("token", token, {
+//   httpOnly: true,
+//   secure: process.env.NODE_ENV === "production", // production me sirf HTTPS
+//   sameSite: "strict",
+//   maxAge: 24 * 60 * 60 * 1000 // 1 day
+// });
+
+
 res.cookie("token", token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // production me sirf HTTPS
-  sameSite: "strict",
+  secure: true,            // Render uses HTTPS
+  sameSite: "none",        // ✅ allow cross-site cookies
+  path: "/",               // ✅ important
   maxAge: 24 * 60 * 60 * 1000 // 1 day
 });
+
 
 res.status(200).json({ message: "Login successful!", user }); // token ab cookie me hai
 
@@ -90,11 +100,23 @@ res.status(200).json({ message: "Login successful!", user }); // token ab cookie
 // Logout (clear cookie)
 router.post('/logout', authMiddleware, async (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+    // res.clearCookie("token", {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    // });
+
+
+res.clearCookie("token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/"
+});
+
+
+
+
     res.json({ message: "Logged out successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -447,6 +469,7 @@ router.post("/forgot-password", async (req, res) => {
       },
     });
 
+    
     const resetUrl = `http://localhost:3000/reset-password/${token}`;
     await transporter.sendMail({
       from: `"App Name" <${process.env.SMTP_USER}>`,
