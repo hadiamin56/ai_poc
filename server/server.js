@@ -18,16 +18,14 @@ app.set("trust proxy", 1);
 // ✅ CORS setup with credentials
 app.use(
   cors({
-    origin:["http://localhost:3000",
-      ,
-      "https://ai-poc-3.onrender.com",
-      "https://ai-poc-4.onrender.com"
-
-    ],// frontend URL
-
-    credentials: true, // allow cookies
+    origin: [
+      "http://localhost:3000",
+      "https://ai-poc-4.onrender.com", // ✅ your React frontend
+    ],
+    credentials: true,
   })
 );
+
 
 
 
