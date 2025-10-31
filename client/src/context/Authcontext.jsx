@@ -166,6 +166,72 @@
 
 
 
+// prevous thur code
+
+
+
+// import { createContext, useState, useEffect } from "react";
+// import axios from "axios";
+
+// export const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   // Fetch current user from backend using cookie
+//   const fetchUser = async () => {
+//     try {
+//       const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/dashboard", {
+//         withCredentials: true, // ✅ send cookie
+//       });
+
+//       if (res.data?.user) {
+//         setUser(res.data.user);
+//       } else {
+//         setUser(null);
+//       }
+//     } catch (err) {
+//       console.error("Fetch user failed:", err);
+//       setUser(null);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchUser();
+//   }, []);
+
+//   // loginUser just refreshes user info, cookie is handled by backend
+//   const loginUser = async () => {
+//     await fetchUser();
+//   };
+
+//   const logoutUser = async () => {
+//     try {
+//       await axios.post("https://ai-poc-3.onrender.com/api/auth/logout", {}, { withCredentials: true });
+//     } catch (err) {
+//       console.error("Logout failed:", err);
+//     }
+//     setUser(null);
+//   };
+
+//   // Call this after any action that changes user-related data
+//   const refreshUser = async () => {
+//     setLoading(true);
+//     await fetchUser();
+//   };
+
+//   return (
+//     <AuthContext.Provider value={{ user, loginUser, logoutUser, loading, refreshUser }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+
+
 
 
 
@@ -173,18 +239,17 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
+axios.defaults.withCredentials = true; // ✅ Always send cookies
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch current user from backend using cookie
   const fetchUser = async () => {
     try {
-      const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/dashboard", {
-        withCredentials: true, // ✅ send cookie
-      });
+      const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/dashboard");
 
       if (res.data?.user) {
         setUser(res.data.user);
@@ -203,21 +268,24 @@ export const AuthProvider = ({ children }) => {
     fetchUser();
   }, []);
 
-  // loginUser just refreshes user info, cookie is handled by backend
-  const loginUser = async () => {
-    await fetchUser();
+  const loginUser = async (formData) => {
+    try {
+      await axios.post("https://ai-poc-3.onrender.com/api/auth/login", formData);
+      await fetchUser();
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
   };
 
   const logoutUser = async () => {
     try {
-      await axios.post("https://ai-poc-3.onrender.com/api/auth/logout", {}, { withCredentials: true });
+      await axios.post("https://ai-poc-3.onrender.com/api/auth/logout");
     } catch (err) {
       console.error("Logout failed:", err);
     }
     setUser(null);
   };
 
-  // Call this after any action that changes user-related data
   const refreshUser = async () => {
     setLoading(true);
     await fetchUser();
