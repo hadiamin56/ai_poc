@@ -20,7 +20,7 @@ export default function Login() {
       
       // loginUser(res.data.token, res.data.user);
 
-      await loginUser(); // fetch user after login
+      await loginUser({ email, password } ); // fetch user after login
 
       
       setMessage({ type: "success", text: "Login successful!" });
