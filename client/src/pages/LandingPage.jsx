@@ -377,7 +377,7 @@ export default function LandingPage() {
           </button>
         </header>
 
-        {/* Hero Section */}
+        {/* Hero Section 
         <main className="max-w-[1600px] mx-auto px-20 py-20 flex flex-col-reverse lg:flex-row items-center justify-between gap-14">
           <div className="lg:w-1/2 w-full flex flex-col items-center lg:items-start animate-[floatUpDown_10s_ease-in-out_infinite]">
            
@@ -422,7 +422,77 @@ export default function LandingPage() {
               <IllustrationSVG />
             </div>
           </div>
-        </main>
+        </main>           */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* Hero Section */}
+<main className="max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-20 py-12 sm:py-20 flex flex-col-reverse lg:flex-row items-center justify-between gap-10 lg:gap-14">
+  
+  {/* Text */}
+  <div className="lg:w-1/2 w-full flex flex-col items-center lg:items-start text-center lg:text-left animate-[floatUpDown_10s_ease-in-out_infinite]">
+    
+    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-6 select-none hover:[&_span]:animate-[letterSpread_0.6s_ease-in-out]">
+      {[
+        "Simplify Your Invoice",
+        "Management with AI",
+      ].map((line, lineIndex) => (
+        <div key={lineIndex}>
+          {Array.from(line).map((ch, i) => (
+            <span
+              key={i}
+              className={`inline-block transition-transform ${
+                ch === " " ? "w-2" : ""
+              }`}
+            >
+              {ch === " " ? "\u00A0" : ch}
+            </span>
+          ))}
+        </div>
+      ))}
+    </h1>
+
+    <p className="text-base sm:text-lg text-gray-600 max-w-md mb-8">
+      Automate invoice uploads, verification, and tracking seamlessly — your intelligent business assistant.
+    </p>
+
+    <button
+      onClick={() => navigate("/login")}
+      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-md transform transition hover:scale-105"
+    >
+      Get Started →
+    </button>
+  </div>
+
+  {/* Illustration */}
+  <div className="lg:w-1/2 w-full flex justify-center animate-[floatUpDown_12s_ease-in-out_infinite]">
+    <div className="w-[260px] sm:w-[360px] md:w-[480px] lg:w-[580px] drop-shadow-2xl">
+      <IllustrationSVG className="w-full h-auto" />
+    </div>
+  </div>
+</main>
+
+
+
+
+
+
+
+
+
+
 
         {/* Feature Cards with animation */}
         <section className="bg-white/70 backdrop-blur-sm py-20">
