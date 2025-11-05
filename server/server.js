@@ -82,7 +82,7 @@ const __dirnamePath = path.resolve();
 app.use(express.static(path.join(__dirnamePath, "../client/dist")));
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirnamePath, "../client/dist/index.html"));
+  res.sendFile(path.join(__dirnamePath, "../client/public/index.html"));
 });
 
 
