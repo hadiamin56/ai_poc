@@ -79,7 +79,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 
 
 const __dirnamePath = path.resolve();
-app.use(express.static(path.join(__dirnamePath, "../client/dist")));
+app.use(express.static(path.join(__dirnamePath, "../client/public")));
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirnamePath, "../client/public/index.html"));
