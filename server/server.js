@@ -79,11 +79,15 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 
 
 const __dirnamePath = path.resolve();
+
+// Serve client/public instead of /dist
 app.use(express.static(path.join(__dirnamePath, "../client/public")));
 
-app.use((req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirnamePath, "../client/public/index.html"));
 });
+
+
 
 
 
