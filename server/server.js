@@ -73,9 +73,36 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 
 
 // ✅ Fallback route (optional, prevents crash if wrong route hit)
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
+// app.use((req, res) => {
+//   res.status(404).json({ message: "Route not found" });
+// });
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirnamePath, "client/dist", "index.html"));
+// });
+
+
+
+
+// ✅ Serve Frontend Build (Vite client/dist)
+// Serve frontend build
+// const __dirnamePath = path.resolve();
+// app.use(express.static(path.join(__dirnamePath, "../client/dist")));
+
+// // ✅ Express 5 supported syntax for SPA fallback
+// app.all("/*", (req, res) => {
+//   res.sendFile(path.join(__dirnamePath, "../client/dist/index.html"));
+// });
+
+
+
+
+
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+
 
 
 
