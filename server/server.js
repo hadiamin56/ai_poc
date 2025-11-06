@@ -73,7 +73,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 
 
 const __dirnamePath = path.resolve();
-const staticPath = path.join(__dirnamePath, "../client/public");
+const staticPath = path.join(__dirnamePath, "../client/build");
+
 
 console.log("🧭 __dirnamePath:", __dirnamePath);
 console.log("🗂  Serving static files from:", staticPath);
