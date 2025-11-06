@@ -67,13 +67,13 @@ console.log("📁 Static path exists:", fs.existsSync(staticPath));
 app.use(express.static(staticPath));
 
 // ============================
-// ✅ CATCH-ALL ROUTE FOR REACT ROUTER
+// ✅ CATCH-ALL ROUTE FOR REACT ROUTER (OPTION 1)
+// Excludes /api routes using negative lookahead regex
 // This MUST be the last route
 // ============================
-app.get('*', (req, res) => {
+app.get(/^(?!\/api\/).*$/, (req, res) => {
   const indexPath = path.join(staticPath, "index.html");
   
-  // Check if index.html exists
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath, (err) => {
       if (err) {
@@ -97,5 +97,5 @@ if (process.env.NODE_ENV === "production") {
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
-  console.log(`🚀 Server running on port ${PORT}\n📡 N8N_WEBHOOK_URL: ${process.env.N8N_WEBHOOK_URL}`)
+  console.log(` Server running on port ${PORT}\n📡 N8N_WEBHOOK_URL: ${process.env.N8N_WEBHOOK_URL}`)
 );
