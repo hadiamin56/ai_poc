@@ -241,6 +241,11 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true; // ✅ Always send cookies
 
+
+// const API_URL = import.meta.env.PORT || "http://localhost:5000";
+
+
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -249,7 +254,8 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/dashboard");
+       const res = await axios.get("https://ai-poc-3.onrender.com/api/auth/dashboard");
+      // const res = await axios.get(`${API_URL}/api/auth/dashboard`);
 
       if (res.data?.user) {
         setUser(res.data.user);
