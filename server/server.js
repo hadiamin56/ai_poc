@@ -71,34 +71,25 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 // });
 
 
-const __dirnamePath = path.resolve();
 
+const __dirnamePath = path.resolve();
+const staticPath = path.join(__dirnamePath, "../client/public");
 
 console.log("🧭 __dirnamePath:", __dirnamePath);
 console.log("🗂  Serving static files from:", staticPath);
 
+// Serve static frontend
+app.use(express.static(staticPath));
 
-// // ✅ Serve static files from client/public
-// app.use(express.static(path.join(__dirnamePath, "client/public")));
+// Fallback to React for all other routes
+app.get(/.*/, (req, res) => res.sendFile(path.join(staticPath, "index.html")));
 
-// // ✅ Catch-all route to send index.html for React Router
-// app.get(/.*/, (req, res) => {
-//   res.sendFile(path.join(__dirnamePath, "client/public/index.html"));
-// });
-
-
-
-
-
-app.use(express.static(path.join(__dirnamePath, "../client/public")));
-
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirnamePath, "../client/public/index.html"));
-});
-
-
-
-
+// ============================
+// 💡 Optional: Skip SMTP check on Render
+// ============================
+if (process.env.NODE_ENV === "production") {
+  console.log("⚠️ Skipping SMTP connection check on Render");
+}
 
 
 
