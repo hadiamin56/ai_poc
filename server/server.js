@@ -80,12 +80,15 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 
 const __dirnamePath = path.resolve();
 
-// Serve client/public instead of /dist
-app.use(express.static(path.join(__dirnamePath, "../client/public")));
 
+// ✅ Serve static files from client/public
+app.use(express.static(path.join(__dirnamePath, "client/public")));
+
+// ✅ Catch-all route to send index.html for React Router
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirnamePath, "../client/public/index.html"));
+  res.sendFile(path.join(__dirnamePath, "client/public/index.html"));
 });
+
 
 
 
