@@ -77,8 +77,12 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // actual 
 //   res.status(404).json({ message: "Route not found" });
 // });
 
-
+const path = require("path");
 const __dirnamePath = path.resolve();
+
+
+console.log("🧭 __dirnamePath:", __dirnamePath);
+console.log("🗂  Serving static files from:", staticPath);
 
 
 // // ✅ Serve static files from client/public
