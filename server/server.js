@@ -85,9 +85,9 @@ app.use(express.static(staticPath));
 // Fallback to React for all other routes
 // app.get(/.*/, (req, res) => res.sendFile(path.join(staticPath, "index.html")));
 
-
-app.get("/.*/", (req, res) => {
-  res.sendFile(path.join(staticPath, "index.html"));
+// ✅ use regex for SPA fallback route (works on all versions)
+app.get(/^\/(.*)$/, (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
 // ============================

@@ -1123,7 +1123,13 @@ export default function BusinessInfo({ user = {}, refreshUser }) {
     setEditModalOpen(true);
   };
 
+
+
+
   const handleSaveEmail = async () => {
+
+
+
     try {
       // const res = await fetch("http://localhost:5000/api/auth/update-my-email", {
 const res = await fetch("https://ai-poc-3.onrender.com/api/auth/update-my-email", {
@@ -1145,14 +1151,27 @@ const res = await fetch("https://ai-poc-3.onrender.com/api/auth/update-my-email"
     }
   };
 
+
+
+
+
   // --- Send OTP ---
   const handleSendOtp = async () => {
+
+
+console.log("📤 Send OTP clicked. Sending request to:", `${BASE_URL}/api/auth/send-otp`);
+  console.log("➡️ Email being sent to:", newEmail);
+
+
     try {
       const res = await fetch("https://ai-poc-3.onrender.com/api/auth/send-otp", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ newEmail: email }),
+        // body: JSON.stringify({ newEmail: email }),
+              body: JSON.stringify({ newEmail }),
+              
+
       });
 
       const data = await res.json();
@@ -1164,6 +1183,11 @@ const res = await fetch("https://ai-poc-3.onrender.com/api/auth/update-my-email"
       alert(err.message || "Failed to send OTP");
     }
   };
+
+
+
+
+
 
   // --- Verify OTP ---
   const handleVerifyOtp = async () => {
