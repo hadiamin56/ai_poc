@@ -60,7 +60,7 @@ router.post("/upload", authMiddleware, upload.single("file"), async (req, res) =
   }
 
   const n8nWebhookUrl =
-    process.env.N8N_WEBHOOK_URL || "https://adil2025.app.n8n.cloud/webhook/ocr-llm";
+    process.env.N8N_WEBHOOK_URL || "https://riabux222.app.n8n.cloud/webhook/ocr-llm";
 
   const form = new FormData();
   form.append("file", fs.createReadStream(req.file.path), req.file.originalname);
