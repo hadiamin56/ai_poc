@@ -14,7 +14,7 @@ export default function ForgotPassword() {
     setSending(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/forgot-password", { email });
+      const res = await axios.post("https://ai-poc-3.onrender.com/api/auth/forgot-password", { email });
       setMessage({ type: "success", text: res.data.message });
       setEmail(""); // clear input on success
     } catch (err) {

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const authMiddleware = require('../middleware/authMiddleware');
 // routes/authRoutes.js
 const nodemailer = require("nodemailer");
-
+const { sendOtpEmail } = require('../utils/email');
 
 // Middleware
 const checkAdmin = (req, res, next) => {
@@ -62,12 +62,71 @@ router.post('/login', async (req, res) => {
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ message: 'Invalid email or password' });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    res.json({ token, user });
+    // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    // res.json({ token, user });
+
+
+
+// changes occur here
+
+const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+// ✅ Set HTTP-only cookie
+// res.cookie("token", token, {
+//   httpOnly: true,
+//   secure: process.env.NODE_ENV === "production", // production me sirf HTTPS
+//   sameSite: "strict",
+//   maxAge: 24 * 60 * 60 * 1000 // 1 day
+// });
+
+
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,            // Render uses HTTPS
+  sameSite: "none",        // ✅ allow cross-site cookies
+  path: "/",               // ✅ important
+  maxAge: 24 * 60 * 60 * 1000 // 1 day
+});
+
+
+res.status(200).json({ message: "Login successful!", user }); // token ab cookie me hai
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+// Logout (clear cookie)
+router.post('/logout', authMiddleware, async (req, res) => {
+  try {
+    // res.clearCookie("token", {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    // });
+
+
+res.clearCookie("token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/"
+});
+
+
+
+
+    res.json({ message: "Logged out successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+
+
+
 
 // Create sub-user - only approved admins
 router.post('/create-user', authMiddleware, checkAdmin, async (req, res) => {
@@ -295,7 +354,7 @@ router.get('/pending-user/:id', authMiddleware, checkSuperAdmin, async (req, res
 });
 
 const crypto = require('crypto');
-const { sendOtpEmail } = require('../utils/email');
+
 
 // --- Admin updates their own email ---
 router.patch('/update-my-email', authMiddleware, async (req, res) => {
@@ -410,6 +469,7 @@ router.post("/forgot-password", async (req, res) => {
       },
     });
 
+    
     const resetUrl = `http://localhost:3000/reset-password/${token}`;
     await transporter.sendMail({
       from: `"App Name" <${process.env.SMTP_USER}>`,
